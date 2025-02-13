@@ -1,7 +1,7 @@
-import Joi from "joi";
-import DB from "../database/database";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+const Joi = require("joi");
+const DB = require("../database/database");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
