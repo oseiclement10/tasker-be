@@ -22,7 +22,7 @@ const createPost = async (req, res) => {
 
   const { error } = schema.validate(req.body);
   if (error) {
-    return  res.status(400).json({
+    return res.status(400).json({
       message: "Validation Failed",
       errors: error.details.map((err) => err.message),
     });
@@ -30,8 +30,8 @@ const createPost = async (req, res) => {
 
   try {
     const result = await DB.query(
-      "INSERT INTO posts(title,content)  values(?,?)",
-      [title, content]
+      "INSERT INTO posts(title,content,authorId)  values(?,?,?)",
+      [title, content, req.user_id]
     );
     return res.status(201).json({
       message: "Created Succesfully",
@@ -41,7 +41,7 @@ const createPost = async (req, res) => {
       },
     });
   } catch (err) {
-    return  res.status(500).json({
+    return res.status(500).json({
       message: "Database Error",
       errors: err?.message,
     });
@@ -61,7 +61,7 @@ const updatePost = async (req, res) => {
   const { error } = schema.validate(req.body);
 
   if (error) {
-   return  res.status(400).json({
+    return res.status(400).json({
       message: "Validation Failed",
       errors: error.details.map((elem) => elem.message),
     });
@@ -94,7 +94,7 @@ const deletePost = async (req, res) => {
       id: post.id,
     });
   } catch (err) {
-    return  res.status(500).json({
+    return res.status(500).json({
       message: "Database Error",
       error: err.message,
     });

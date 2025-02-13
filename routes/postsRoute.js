@@ -9,6 +9,12 @@ const {
 
 const authMiddleware = require("../middlewares/auth");
 
-router.get("/", authMiddleware, getAllPosts);
+router.use(authMiddleware);
+
+router.get("/", getAllPosts);
+router.get("/:id", getPostById);
+router.post("/", createPost);
+router.put("/:id", updatePost);
+router.delete("/:id", deletePost);
 
 module.exports = router;

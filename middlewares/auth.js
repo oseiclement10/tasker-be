@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const DB = require("../database/database");
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.headers?.authorization?.split("T")[1];
+  const token = req.headers?.authorization?.split(" ")[1];
   if (!token) {
     return res.status(401).json({
       message: "Unauthenticated",
@@ -19,14 +19,17 @@ const authMiddleware = async (req, res, next) => {
     });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, function (err) {
-    if (err) {
-      return res.status(401).json({
-        message: "Unauthenticated",
-      });
-    }
+  try {
+    const decoded = jwt.verify(token,process.env.JWT_SECRET);
+    req.user_id = decoded.user_id;
     next();
-  });
+  } catch (err) {
+    return res.status(401).json({
+      message: "Unauthenticated",
+      errro: err.message,
+    });
+  }
+
 };
 
 module.exports = authMiddleware;

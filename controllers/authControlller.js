@@ -43,7 +43,7 @@ const signIn = async (req, res) => {
     }
 
     const payLoad = {
-      id: user.id,
+      user_id: user.id,
       firstname: user.firstname,
       email: user.email,
     };
@@ -54,7 +54,7 @@ const signIn = async (req, res) => {
 
     return res.status(200).json({
       access_token,
-      user,
+      user: { ...payLoad, othernames: user?.othernames },
     });
   } catch (err) {
     return res.status(500).json({
@@ -87,12 +87,13 @@ const signUp = async (req, res) => {
   const { firstname, othernames, email, password } = req.body;
 
   try {
-    const [existingUser] = DB.query("SELECT id from users where email = ?", [
-      email,
-    ]);
+    const [existingUser] = await DB.query(
+      "SELECT id from users where email = ?",
+      [email]
+    );
 
-    if (existingUser.length) {
-      res.status(400).json({ message: "User already exists" });
+    if (existingUser?.length) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -104,7 +105,7 @@ const signUp = async (req, res) => {
     );
 
     return res.status(201).json({
-      id: result.insertId,
+      id: result?.insertId,
       firstname,
       othernames,
       email,
