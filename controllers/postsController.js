@@ -1,4 +1,4 @@
-import Joi from "joi";
+const Joi = require("joi");
 const DB = require("../database/database");
 
 const getAllPosts = async (req, res) => {
@@ -102,7 +102,6 @@ const deletePost = async (req, res) => {
 };
 
 // UTILS
-
 const handleFindById = async (postId, res) => {
   const [rows] = await DB.query("SELECT * from posts where id = ?", [postId]);
   if (!rows[0]["id"]) {
