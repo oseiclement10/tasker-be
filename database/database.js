@@ -1,7 +1,7 @@
 const dbConfig = require("../config/database.js");
 const mysql = require("mysql2/promise");
 
-const pool = mysql.createPool({
+const DB = mysql.createPool({
   ...dbConfig,
   waitForConnections: true,
   queueLimit: 0,
@@ -22,6 +22,5 @@ const testConnection = async () => {
 
 
 
-module.exports = {
-  pool,
-};
+
+module.exports = DB;
