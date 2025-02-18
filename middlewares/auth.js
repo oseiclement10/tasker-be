@@ -26,7 +26,7 @@ const authMiddleware = async (req, res, next) => {
   } catch (err) {
     return res.status(401).json({
       message: "Unauthenticated",
-      errro: err.message,
+      error: err.message,
     });
   }
 

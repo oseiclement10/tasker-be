@@ -64,6 +64,7 @@ const signIn = async (req, res) => {
   }
 };
 
+
 const signUp = async (req, res) => {
   const schema = Joi.object({
     firstname: Joi.string().min(2).required(),
@@ -71,7 +72,11 @@ const signUp = async (req, res) => {
     email: Joi.string().email().required(),
     password: Joi.string()
       .min(6)
-      .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{6,}$")),
+      .pattern(new RegExp("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{6,}$"))
+      .required()
+      .messages({
+        "string.pattern.base": "Password must contain at least one letter and one number",
+      }),
     repeat_password: Joi.ref("password"),
   });
 

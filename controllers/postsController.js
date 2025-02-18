@@ -6,6 +6,13 @@ const getAllPosts = async (req, res) => {
   return res.json({ data: rows });
 };
 
+const getUserPosts = async (req, res) => {
+  const [rows] = await DB.query("SELECT * FROM posts where authorId = ?", [
+    req.user_id,
+  ]);
+  return res.json({ data: rows });
+};
+
 const getPostById = async (req, res) => {
   const { id } = req.params;
   const post = await handleFindById(id, res);
@@ -104,7 +111,7 @@ const deletePost = async (req, res) => {
 // UTILS
 const handleFindById = async (postId, res) => {
   const [rows] = await DB.query("SELECT * from posts where id = ?", [postId]);
-  if (!rows[0]["id"]) {
+  if (!rows[0]) {
     return res.status(404).json({
       message: "Post not found",
     });
@@ -115,6 +122,7 @@ const handleFindById = async (postId, res) => {
 
 module.exports = {
   getAllPosts,
+  getUserPosts,
   getPostById,
   deletePost,
   createPost,
